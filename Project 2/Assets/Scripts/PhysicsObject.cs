@@ -20,19 +20,27 @@ public class PhysicsObject : MonoBehaviour
 
     public float frictionCoeff = 0.2f;
 
+    private Vector3 cameraSize;
+
     public Vector2 Velocity => velocity;
     public Vector2 Direction => direction;
-    public Vector3 Position
+    public Vector2 Right => transform.right;
+    public Vector2 Position
     {
         get => transform.position;
         set => transform.position = value;
     }
+
+    public Vector3 CameraSize => cameraSize;
 
     public float radius = 1f;
 
     // Start is called before the first frame update
     void Start()
     {
+        cameraSize.y = Camera.main.orthographicSize;
+        cameraSize.x = cameraSize.y * Camera.main.aspect;
+
         direction = Random.insideUnitCircle.normalized;
     }
 
@@ -66,6 +74,17 @@ public class PhysicsObject : MonoBehaviour
         if (rotateWithDirection)
         {
             transform.rotation = Quaternion.LookRotation(Vector3.back, direction);
+        }
+        else
+        {
+            if(velocity.x < 0)
+            {
+                GetComponent<SpriteRenderer>().flipX = true;
+            }
+            else
+            {
+                GetComponent<SpriteRenderer>().flipX = false;
+            }
         }
 
         if (bounceOffWalls)
@@ -109,21 +128,21 @@ public class PhysicsObject : MonoBehaviour
     private void BounceOffWalls()
     {
         // Horizontal
-        if(transform.position.x > AgentManager.Instance.maxPosition.x && velocity.x > 0)
+        if(transform.position.x > cameraSize.x && velocity.x > 0)
         {
             velocity.x *= -1f;
         }
-        if (transform.position.x < AgentManager.Instance.minPosition.x && velocity.x < 0)
+        if (transform.position.x < -cameraSize.x && velocity.x < 0)
         {
             velocity.x *= -1f;
         }
 
         // Vertical
-        if (transform.position.y > AgentManager.Instance.maxPosition.y && velocity.y > 0)
+        if (transform.position.y > cameraSize.y && velocity.y > 0)
         {
             velocity.y *= -1f;
         }
-        if (transform.position.y < AgentManager.Instance.minPosition.y && velocity.y < 0)
+        if (transform.position.y < -cameraSize.y && velocity.y < 0)
         {
             velocity.y *= -1f;
         }

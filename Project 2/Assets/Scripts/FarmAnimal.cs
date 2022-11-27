@@ -9,5 +9,6 @@ public class FarmAnimal : Agent
         Wander();
         StayInBounds(3f);
         Separate(AgentManager.Instance.farmAnimals);
+        AvoidAllObstacles();
     }
 }

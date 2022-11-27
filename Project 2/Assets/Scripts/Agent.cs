@@ -1,7 +1,9 @@
- using System.Collections;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
+using Random = UnityEngine.Random;
 
 [RequireComponent(typeof(PhysicsObject))]
 public abstract class Agent : MonoBehaviour
@@ -20,6 +22,8 @@ public abstract class Agent : MonoBehaviour
     public float maxWanderChangePerSecond = 10f;
 
     public float personalSpace = 1f;
+
+    public float visionRange = 2f;
 
     private void Awake()
     {
@@ -85,7 +89,7 @@ public abstract class Agent : MonoBehaviour
         Seek(wanderTarget, weight);
     }
 
-    protected void StayInBounds(float bufferSize = 0f, float weight = 1f)
+    protected void StayInBounds(float weight = 1f)
     {
         Vector2 futurePosition = GetFuturePosition(1);
 
@@ -113,15 +117,84 @@ public abstract class Agent : MonoBehaviour
 
             if(sqrDistance < sqrPersonalSpace)
             {
-                float weight = sqrPersonalSpace + (sqrDistance + 0.1f);
+                float weight = sqrPersonalSpace / (.05f * sqrDistance + 0.05f);
                 Flee(other.physicsObject.Position, weight);
             }
+        }
+    }
+
+    protected void AvoidObstacle(Obstacle obstacle)
+    {
+        // Get a vector from this agent to the obstacle
+        Vector2 toObstacle = obstacle.Position - physicsObject.Position;
+
+        // Check if the obstacle is behind
+        float fwdToObstacleDot = Vector2.Dot(physicsObject.Direction, toObstacle);
+
+        // Object is behind us, do nothing.
+        if(fwdToObstacleDot < 0)
+        {
+            return;
+        }
+
+        // Check if the obstacle is too far to the left or right
+        float rightToObstacleDot = Vector2.Dot(physicsObject.Right, toObstacle);
+        if (Math.Abs(rightToObstacleDot) > physicsObject.radius + obstacle.radius)
+        {
+            return;
+        }
+
+        // Check if the obstacle is within vision range
+        if(rightToObstacleDot > visionRange)
+        {
+            return;
+        }
+
+        // Passed all checks, avoid obstacle
+        Vector2 desiredVelocity;
+
+        if(rightToObstacleDot > 0)
+        {
+            // If on the right, steer left
+            desiredVelocity = physicsObject.Right * -maxSpeed;
+        }
+        else
+        {
+            // If on the left, steer right
+            desiredVelocity = physicsObject.Right * maxSpeed;
+        }
+
+        // Create a weight based on obstacle proximity
+        float weight = visionRange / (0.05f * fwdToObstacleDot + 0.05f);
+
+        // Calculate steering force from the desired velocity
+        Vector2 steeringForce = (desiredVelocity - physicsObject.Velocity) * weight;
+
+        // Apply the steering force to the total force
+        totalForce += steeringForce;
+    }
+
+    protected void AvoidAllObstacles()
+    {
+        foreach(Obstacle obstacle in ObstacleManager.Instance.Obstacles)
+        {
+            AvoidObstacle(obstacle);
         }
     }
 
     public Vector2 GetFuturePosition(float timeToLookAhead = 1f)
     {
         return (Vector2)physicsObject.Position + physicsObject.Velocity * timeToLookAhead;
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.white;
+        Gizmos.DrawLine(physicsObject.Position, physicsObject.Position + physicsObject.Right);
+
+        Gizmos.color = Color.blue;
+        Gizmos.DrawLine(physicsObject.Position, physicsObject.Position + (Vector2)physicsObject.transform.forward);
+
     }
 
     private void OnDrawGizmosSelected()

@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 6545201822679093333}
   - component: {fileID: 6545201822679093332}
-  - component: {fileID: -4873533242889560428}
   - component: {fileID: -8435724726072288109}
+  - component: {fileID: 2762505176506728887}
   m_Layer: 0
   m_Name: dog
   m_TagString: Untagged
@@ -86,25 +86,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &-4873533242889560428
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6545201822679093355}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f500e7e1012ff2e45aa4cc05d847c9c5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mass: 1
-  bounceOffWalls: 0
-  useGravity: 0
-  useFriction: 0
-  rotateWithDirection: 0
-  frictionCoeff: 0.2
-  radius: 1
 --- !u!114 &-8435724726072288109
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -117,9 +98,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8af4ae805b16aad4bb61394958411cf4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  physicsObject: {fileID: -4873533242889560428}
-  maxSpeed: 5
+  physicsObject: {fileID: 0}
+  maxSpeed: 2
   maxForce: 5
   maxWanderAngle: 45
   maxWanderChangePerSecond: 10
   personalSpace: 1
+  visionRange: 2
+--- !u!114 &2762505176506728887
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6545201822679093355}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c856dcc0afaddd54a9c62fd426a275e2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mass: 1
+  bounceOffWalls: 0
+  useGravity: 0
+  useFriction: 0
+  rotateWithDirection: 0
+  frictionCoeff: 0.2
+  radius: 1
