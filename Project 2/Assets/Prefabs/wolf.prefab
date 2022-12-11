@@ -10,7 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 3452927724636831874}
   - component: {fileID: 3452927724636831875}
-  - component: {fileID: 383811412511118021}
+  - component: {fileID: 6937754698590196232}
+  - component: {fileID: 7218853782732113892}
   m_Layer: 0
   m_Name: wolf
   m_TagString: Untagged
@@ -85,7 +86,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &383811412511118021
+--- !u!114 &6937754698590196232
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -94,12 +95,34 @@ MonoBehaviour:
   m_GameObject: {fileID: 3452927724636831872}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f500e7e1012ff2e45aa4cc05d847c9c5, type: 3}
+  m_Script: {fileID: 11500000, guid: c856dcc0afaddd54a9c62fd426a275e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   mass: 1
   bounceOffWalls: 0
   useGravity: 0
   useFriction: 0
+  rotateWithDirection: 0
   frictionCoeff: 0.2
-  radius: 1
+  radius: 0.5
+--- !u!114 &7218853782732113892
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3452927724636831872}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b33d6da4adb68ad43af1ed3e9cdb9a4b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  physicsObject: {fileID: 6937754698590196232}
+  maxSpeed: 4.5
+  maxForce: 5
+  maxWanderAngle: 45
+  maxWanderChangePerSecond: 10
+  personalSpace: 1.5
+  visionRange: 3
+  arriveDistance: 3
+  visionConeAngle: 45

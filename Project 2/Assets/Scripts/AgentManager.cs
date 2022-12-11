@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,6 +11,11 @@ public class AgentManager : MonoBehaviour
     public int numFarmAnimals = 10;
     [HideInInspector]
     public List<FarmAnimal> farmAnimals = new List<FarmAnimal>();
+
+    public Wolf wolfPrefab;
+    public int numWolves = 1;
+    [HideInInspector]
+    public List<Wolf> wolves = new List<Wolf>();
 
     [HideInInspector]
     public Vector2 maxPosition = Vector2.one;
@@ -41,10 +47,17 @@ public class AgentManager : MonoBehaviour
             minPosition.y = camPosition.y - halfHeight + edgePadding;
         }
 
+        // Spawn the farm animals
         for(int i = 0; i < numFarmAnimals; i++)
         {
             FarmAnimal randomFarmAnimalPrefab = farmAnimalPrefabs[(int)(Random.value * farmAnimalPrefabs.Count)];
             farmAnimals.Add(Spawn(randomFarmAnimalPrefab));
+        }
+
+        // Spawn the hostile wolves
+        for(int i = 0; i < numWolves; i++)
+        {
+            wolves.Add(Spawn(wolfPrefab));
         }
     }
 
